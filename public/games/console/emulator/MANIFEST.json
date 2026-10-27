@@ -1,0 +1,170 @@
+{
+  "repository": "https://github.com/EmulatorJS/EmulatorJS",
+  "version": "4.2.3",
+  "commit": "e150dc0491ae747028919fb82d6598954976ede6",
+  "fetchedAt": "2026-10-27",
+  "files": [
+    {
+      "file": "LICENSE",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/LICENSE",
+      "bytes": 35111,
+      "sha256": "a617fab6d251b3302b1cb2c1c94f52d1c584f6fcb2fc218ec1a475bc08053a61"
+    },
+    {
+      "file": "README.md",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/README.md",
+      "bytes": 9328,
+      "sha256": "7fa1203688bb528a34c08a63905058cf24498172293f64be734f49392ad2e9ef"
+    },
+    {
+      "file": "data/loader.js",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/data/loader.js",
+      "bytes": 7594,
+      "sha256": "69e0903bf1e2f62ced78895e7e511fa26e11316f7eb734925c35e919ba1287b2"
+    },
+    {
+      "file": "data/emulator.css",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/data/emulator.css",
+      "bytes": 33532,
+      "sha256": "0ba5b1ce183b6ecb95c17e54e89fbae77697ebb94ec23caca5fd19f9b569defe"
+    },
+    {
+      "file": "data/version.json",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/data/version.json",
+      "bytes": 126,
+      "sha256": "d8991427000a96fb97daefdb62178071e9bbff911760706148e584ae8d69f9e7"
+    },
+    {
+      "file": "data/src/emulator.js",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/data/src/emulator.js",
+      "bytes": 341775,
+      "sha256": "24ebac4baf739892046b82c3bdf01d5b6795b801b77d289e43a4c7d59f9666be"
+    },
+    {
+      "file": "data/src/nipplejs.js",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/data/src/nipplejs.js",
+      "bytes": 20259,
+      "sha256": "cf745190f5dc5db942ad54f5683d56c6d6da445646f4b4fc23c049c9985a04df"
+    },
+    {
+      "file": "data/src/shaders.js",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/data/src/shaders.js",
+      "bytes": 139565,
+      "sha256": "79bcd4c35740b2858fc28f2f1894ddb8f483f1aba6f564869a713515726fe902"
+    },
+    {
+      "file": "data/src/storage.js",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/data/src/storage.js",
+      "bytes": 4600,
+      "sha256": "06759f310bb2d782d2728e1d3417a0d8f613eff935d2959c1a705670041a6f2e"
+    },
+    {
+      "file": "data/src/gamepad.js",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/data/src/gamepad.js",
+      "bytes": 6054,
+      "sha256": "27707ee9256cf3e1a6f32d1c3c42f2aed991d637773699fff566008229cc09c8"
+    },
+    {
+      "file": "data/src/GameManager.js",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/data/src/GameManager.js",
+      "bytes": 19048,
+      "sha256": "f026130eda3648557498c54c70cbb5b36fd71b088e7e42e5a13e413aab11d888"
+    },
+    {
+      "file": "data/src/socket.io.min.js",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/data/src/socket.io.min.js",
+      "bytes": 46831,
+      "sha256": "b0e735814f8dcfecd6cdb8a7ce95a297a7e1e5f2727a29e6f5901801d52fa0c5"
+    },
+    {
+      "file": "data/src/compression.js",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/data/src/compression.js",
+      "bytes": 6409,
+      "sha256": "bd6723ec29fee8de81118cfbddfcb53301b8f41f7c6fb22c2de44dedbf111c2c"
+    },
+    {
+      "file": "data/compression/README.md",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/data/compression/README.md",
+      "bytes": 189,
+      "sha256": "c01bf373463b6eac94ce2db8f6102010c104683bd70203e9b1343865693d1db5"
+    },
+    {
+      "file": "data/compression/extract7z.js",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/data/compression/extract7z.js",
+      "bytes": 280155,
+      "sha256": "4ac9933b995a516cb6b3ca4027db860278372a20c21c405d93ceb1998498853a"
+    },
+    {
+      "file": "data/compression/extractzip.js",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/data/compression/extractzip.js",
+      "bytes": 196199,
+      "sha256": "3cc825428724213acd43d30552a78008e0869b2326de17dee240dbff9ee2f629"
+    },
+    {
+      "file": "data/compression/libunrar.js",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/data/compression/libunrar.js",
+      "bytes": 66684,
+      "sha256": "bc35b98ec95020ec047f4762de3e66629741eee3826022195498d2a1e0fc102c"
+    },
+    {
+      "file": "data/compression/libunrar.wasm",
+      "url": "https://raw.githubusercontent.com/EmulatorJS/EmulatorJS/v4.2.3/data/compression/libunrar.wasm",
+      "bytes": 173799,
+      "sha256": "e4ea9bd0b13a9767916b424469e30205f47f267ecd9125ed56fb9ff0b9bc1b58"
+    },
+    {
+      "file": "data/cores/mgba-wasm.data",
+      "url": "https://cdn.emulatorjs.org/4.2.3/data/cores/mgba-wasm.data",
+      "bytes": 1055616,
+      "sha256": "01fcaf6d4296ef1db6676e0c69400c4474e24572d0b2b99cc097e4ae885e02d7"
+    },
+    {
+      "file": "data/cores/mgba-legacy-wasm.data",
+      "url": "https://cdn.emulatorjs.org/4.2.3/data/cores/mgba-legacy-wasm.data",
+      "bytes": 1054993,
+      "sha256": "e300d2f368c82bf61d77c972c36e367cf16408ec3d50beede080337519a3d696"
+    },
+    {
+      "file": "data/cores/reports/mgba.json",
+      "url": "https://cdn.emulatorjs.org/4.2.3/data/cores/reports/mgba.json",
+      "bytes": 118,
+      "sha256": "08219f6c855a9d996f04ed21169bb0c5ac64d469a8a536468b9876205b5c268d"
+    },
+    {
+      "file": "data/cores/snes9x-wasm.data",
+      "url": "https://cdn.emulatorjs.org/4.2.3/data/cores/snes9x-wasm.data",
+      "bytes": 1093765,
+      "sha256": "eaa0bcfce67673809886e50387a80a616b719502175db64c090d04c9d75958ee"
+    },
+    {
+      "file": "data/cores/snes9x-legacy-wasm.data",
+      "url": "https://cdn.emulatorjs.org/4.2.3/data/cores/snes9x-legacy-wasm.data",
+      "bytes": 1092437,
+      "sha256": "7d427a575cefad98ff400493fa1d7e892da63fe7bab68979babd9cea0bfaaf3b"
+    },
+    {
+      "file": "data/cores/reports/snes9x.json",
+      "url": "https://cdn.emulatorjs.org/4.2.3/data/cores/reports/snes9x.json",
+      "bytes": 120,
+      "sha256": "dc7ac963eb7935a7ac78956235ac0b8912ec785c57026336825aa2ed8031b3ad"
+    },
+    {
+      "file": "data/cores/mupen64plus_next-wasm.data",
+      "url": "https://cdn.emulatorjs.org/4.2.3/data/cores/mupen64plus_next-wasm.data",
+      "bytes": 1451795,
+      "sha256": "2da1cbce9fda395e3ae83ca5787353baa159142d45ef3ea90f108b92524f76cc"
+    },
+    {
+      "file": "data/cores/mupen64plus_next-legacy-wasm.data",
+      "url": "https://cdn.emulatorjs.org/4.2.3/data/cores/mupen64plus_next-legacy-wasm.data",
+      "bytes": 1451870,
+      "sha256": "425072f4bf94eec02633cbe9b84f47d6803dc0ec1b3c3b8de3ebbd2eb5617c3f"
+    },
+    {
+      "file": "data/cores/reports/mupen64plus_next.json",
+      "url": "https://cdn.emulatorjs.org/4.2.3/data/cores/reports/mupen64plus_next.json",
+      "bytes": 153,
+      "sha256": "270105553cec57fd1058c50e0541b8b89dbd30b2323fd70682036f6919b805cc"
+    }
+  ]
+}

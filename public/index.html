@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Retro Games Locally</title>
+  <meta name="description" content="A library of open-source retro games you can play offline, on one screen, or online with friends.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🕹️%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="hub.css">
+</head>
+<body>
+  <a class="skip" href="#grid">Skip to games</a>
+  <header class="top">
+    <a class="brand" href="./" aria-label="Retro Games Locally home"><span class="logo">🕹️</span><span>Retro Games <b>Locally</b></span></a>
+    <div class="search">
+      <label class="sr" for="q">Search games</label>
+      <input id="q" type="search" placeholder="Search games… ( / )" autocomplete="off" spellcheck="false">
+    </div>
+    <nav class="actions" aria-label="Tools">
+      <button id="random" class="btn ghost" title="Pick a random playable game">🎲 Random</button>
+      <button id="theme" class="btn ghost" aria-label="Toggle light/dark theme" title="Toggle theme">🌓</button>
+      <button id="help" class="btn ghost" aria-label="Help and keyboard shortcuts" title="Help">?</button>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="heroTitle">
+      <h1 id="heroTitle">Pick a game. <span>Play it right now.</span></h1>
+      <p>Open-source classics bundled for offline play — solo, side by side on one keyboard, or online with a link for friends.</p>
+      <div class="stats" id="stats" aria-live="polite"></div>
+    </section>
+
+    <section class="filters" aria-label="Filters">
+      <div class="row" role="group" aria-label="Who is playing">
+        <span class="lbl">Players</span>
+        <div class="chips" id="modeChips"></div>
+      </div>
+      <div class="row" role="group" aria-label="Category">
+        <span class="lbl">Type</span>
+        <div class="chips" id="catChips"></div>
+      </div>
+      <div class="row small">
+        <label class="inline">Sort
+          <select id="sort">
+            <option value="featured">Featured first</option>
+            <option value="az">A → Z</option>
+            <option value="stars">Most starred source</option>
+          </select>
+        </label>
+        <label class="inline check"><input type="checkbox" id="favOnly"> ♥ Favorites only</label>
+        <button id="clear" class="btn link" hidden>Clear filters</button>
+      </div>
+    </section>
+
+    <section id="recentWrap" class="rail" hidden aria-labelledby="recentTitle">
+      <h2 id="recentTitle">Continue playing</h2>
+      <div id="recent" class="rail-row"></div>
+    </section>
+
+    <section aria-labelledby="allTitle">
+      <h2 id="allTitle" class="sr">All games</h2>
+      <div id="grid" class="grid" role="list"></div>
+      <p id="empty" class="empty" hidden>No games match. <button class="btn link" id="emptyClear">Clear filters</button></p>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p>Every bundled game is the work of its original authors, kept with its license. See <a href="https://github.com/JulianAttemptsCoding/retro-games-locally/blob/main/CREDITS.md" target="_blank" rel="noopener">CREDITS.md</a>. No ROMs, no accounts, no tracking.</p>
+  </footer>
+
+  <dialog id="detail" aria-labelledby="dTitle"></dialog>
+  <dialog id="helpDlg" aria-labelledby="hTitle">
+    <form method="dialog" class="dlg">
+      <h2 id="hTitle">How this works</h2>
+      <ul>
+        <li><b>Solo</b> — just you.</li>
+        <li><b>Local 2P+</b> — shared keyboard or gamepads on one screen.</li>
+        <li><b>Online friends</b> — share the room link; connects peer-to-peer (needs internet to find each other).</li>
+        <li><b>Console</b> — emulator is built in, but you supply your own ROM file. None are included.</li>
+      </ul>
+      <h3>Shortcuts</h3>
+      <p><kbd>/</kbd> search · <kbd>Esc</kbd> close · <kbd>R</kbd> random game · <kbd>F</kbd> toggle favorites filter</p>
+      <button class="btn primary">Got it</button>
+    </form>
+  </dialog>
+  <script type="module" src="hub.js"></script>
+</body>
+</html>

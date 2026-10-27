@@ -1,0 +1,19 @@
+{
+  "name": "retro-games-locally",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "A local-first arcade of established open-source games and shared tabletop rooms.",
+  "scripts": {
+    "start": "node server.js",
+    "prestart": "npm run build",
+    "dev": "npm start",
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.mjs",
+    "test:e2e": "playwright test",
+    "qa": "node scripts/qa.mjs"
+  },
+  "engines": {"node": ">=22"},
+  "dependencies": {"express": "^4.22.1", "three": "^0.185.0", "chess.js": "^1.4.0", "trystero": "0.25.0"},
+  "devDependencies": {"esbuild": "^0.28.2", "@playwright/test": "^1.64.1"}
+}

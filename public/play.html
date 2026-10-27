@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Play · Retro Games Locally</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🕹️%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="hub.css">
+  <style>
+    html, body { height: 100%; overflow: hidden; }
+    body { display: flex; flex-direction: column; background: #000; }
+    .bar { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: var(--bg2); border-bottom: 1px solid var(--line); flex: 0 0 auto; }
+    .bar h1 { font-size: 1rem; margin: 0 auto 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .bar a.btn { text-decoration: none; }
+    .stage { position: relative; flex: 1; min-height: 0; }
+    iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+    .panel { position: absolute; right: 12px; top: 12px; z-index: 5; width: min(380px, calc(100% - 24px)); max-height: calc(100% - 24px); overflow: auto;
+      background: var(--card); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 14px 16px; display: none; }
+    .panel.open { display: block; }
+    .panel h2 { margin: 0 0 6px; font-size: 1.05rem; }
+    .panel .src { font-size: .85rem; color: var(--mute); margin-top: 10px; }
+    .panel a { color: var(--accent2); }
+    .toast { position: absolute; left: 50%; bottom: 18px; transform: translateX(-50%); background: var(--card); border: 1px solid var(--line); padding: 8px 16px; border-radius: 999px; z-index: 6; opacity: 0; pointer-events: none; transition: opacity .2s; }
+    .toast.show { opacity: 1; }
+    .missing { padding: 40px; color: #fff; text-align: center; }
+    @media (max-width: 560px) { .bar .t { display: none; } }
+  </style>
+</head>
+<body>
+  <header class="bar">
+    <a class="btn" href="./" id="back" title="Back to library (Esc twice)">← Library</a>
+    <h1 id="title">Loading…</h1>
+    <button class="btn" id="info" aria-expanded="false" aria-controls="panel">ⓘ <span class="t">Controls</span></button>
+    <button class="btn" id="reload" title="Restart game">↻ <span class="t">Restart</span></button>
+    <button class="btn" id="copy" title="Copy a link to this game">🔗 <span class="t">Copy link</span></button>
+    <button class="btn" id="full" title="Fullscreen">⛶ <span class="t">Fullscreen</span></button>
+  </header>
+  <div class="stage">
+    <iframe id="frame" title="Game" allow="gamepad; fullscreen; autoplay; clipboard-write" allowfullscreen></iframe>
+    <aside class="panel" id="panel" aria-label="Game info"></aside>
+    <div class="toast" id="toast" role="status"></div>
+  </div>
+  <script type="module">
+    import { byId } from './catalog.js';
+    const $ = (s) => document.querySelector(s);
+    const params = new URLSearchParams(location.search);
+    const game = byId[params.get('g')];
+    const frame = $('#frame');
+    const toast = (text) => { const t = $('#toast'); t.textContent = text; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 1800); };
+
+    if (!game || !game.path) {
+      $('#title').textContent = 'Game not found';
+      document.querySelector('.stage').innerHTML = '<div class="missing"><p>That game does not exist or cannot be played here.</p><p><a class="btn primary" href="./">Back to library</a></p></div>';
+    } else {
+      document.title = `${game.title} · Retro Games Locally`;
+      $('#title').textContent = `${game.emoji} ${game.title}`;
+      const target = new URL(game.path, location.href);
+      for (const [k, v] of params) if (k !== 'g') target.searchParams.set(k, v);
+      const load = () => frame.src = target.href;
+      load();
+      frame.addEventListener('load', () => frame.focus());
+      frame.addEventListener('mouseenter', () => frame.focus());
+      try {
+        const recent = [game.id, ...JSON.parse(localStorage.getItem('rgl.recent') || '[]').filter((x) => x !== game.id)].slice(0, 12);
+        localStorage.setItem('rgl.recent', JSON.stringify(recent));
+      } catch { /* storage unavailable */ }
+
+      const panel = $('#panel');
+      const rows = (game.controls || []).map(([k, v]) => `<tr><td><kbd>${k}</kbd></td><td>${v}</td></tr>`).join('');
+      panel.innerHTML = `<h2>${game.title}</h2><p style="margin:0;color:var(--mute)">${game.tagline}</p>
+        ${game.notes ? `<p class="note" style="margin:10px 0">${game.notes}</p>` : ''}
+        ${rows ? `<table class="controls"><tbody>${rows}</tbody></table>` : ''}
+        <p class="src">Source: <a href="${game.source.url}" target="_blank" rel="noopener">${game.source.label}</a> · ${game.source.license}</p>`;
+      const setPanel = (open) => { panel.classList.toggle('open', open); $('#info').setAttribute('aria-expanded', open); };
+      $('#info').onclick = () => setPanel(!panel.classList.contains('open'));
+      $('#reload').onclick = () => { frame.src = 'about:blank'; setTimeout(load, 50); };
+      $('#copy').onclick = async () => {
+        const link = new URL(location.href);
+        try { await navigator.clipboard.writeText(link.href); toast('Link copied'); } catch { toast(link.href); }
+      };
+      $('#full').onclick = () => {
+        if (document.fullscreenElement) document.exitFullscreen();
+        else document.documentElement.requestFullscreen?.().catch(() => toast('Fullscreen blocked'));
+      };
+      if (game.controls?.length && !sessionStorage.getItem('rgl.seen.' + game.id)) {
+        try { sessionStorage.setItem('rgl.seen.' + game.id, '1'); } catch { /* ignore */ }
+        setPanel(true);
+        setTimeout(() => setPanel(false), 6000);
+      }
+    }
+    addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') $('#panel').classList.remove('open');
+    });
+    try { const th = localStorage.getItem('rgl.theme'); if (th) document.documentElement.dataset.theme = JSON.parse(th); } catch { /* ignore */ }
+  </script>
+</body>
+</html>

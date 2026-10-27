@@ -1,0 +1,13 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Tabletop · Local Arcade</title><link rel="stylesheet" href="style.css"></head>
+<body><main>
+ <header><div><span class="eyebrow">THE TABLETOP CLUB</span><h1 id="title">Tabletop</h1></div><span class="modeBadge" id="modeBadge">PASS & PLAY</span></header>
+ <section class="statusbar" aria-label="Game status"><div class="player" id="player0"><span class="swatch one"></span><span id="name0">Player one</span><b id="score0"></b></div><strong id="turn" role="status">Loading game…</strong><div class="player" id="player1"><span class="swatch two"></span><span id="name1">Player two</span><b id="score1"></b></div></section>
+ <div id="board" aria-label="Game board"></div>
+ <p id="notice" role="status"></p>
+ <div class="toolbar"><button id="restart">New game</button><button id="local">Local play</button><label id="promotionLabel" hidden>Promotion <select id="promotion"><option value="q">Queen</option><option value="r">Rook</option><option value="b">Bishop</option><option value="n">Knight</option></select></label></div>
+ <details class="rooms"><summary>Play with a friend online <span>↗</span></summary><div class="roomFields"><label>Your name<input id="name" maxlength="20" placeholder="Player"></label><label>Room code<input id="room" maxlength="8" placeholder="ARCADE" autocapitalize="characters" spellcheck="false"></label><button id="host">Host room</button><button id="join">Join friend</button><button id="share">Copy invite</button></div><p id="connection">Host a room, then send its code or invite link to one friend. Public signaling needs an internet connection.</p></details>
+ <details class="rules"><summary>How to play & credits</summary><p id="instructions"></p><p id="source"></p><p>Local mode works offline. Online rooms support two people, with the host validating moves and turns. A new game requires both players to agree. No account needed.</p><a href="RULES.md" target="_blank" rel="noopener">Rule variants and implementation notes ↗</a></details>
+ <p class="footer">ONE SCREEN. GOOD COMPANY. ONE MORE ROUND.</p>
+</main><script type="module" src="app.js"></script><script>if(window.top===window){var a=document.createElement('a');a.href='../../';a.textContent='← Library';a.style.cssText='position:fixed;right:10px;top:10px;z-index:99;padding:6px 12px;border-radius:999px;background:#161c3a;color:#eef1ff;border:1px solid #2a3363;font:600 13px system-ui,sans-serif;text-decoration:none';document.body.appendChild(a);}</script>
+</body></html>

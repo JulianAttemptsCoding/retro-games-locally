@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">
+  <title>Slope Run</title>
+  <style>
+    html, body { margin: 0; height: 100%; overflow: hidden; background: #050816; font-family: system-ui, "Segoe UI", sans-serif; color: #e8fff4; touch-action: none; user-select: none; }
+    canvas { display: block; width: 100%; height: 100%; }
+    #hud { position: fixed; left: 0; right: 0; top: 0; display: flex; justify-content: space-between; padding: 12px 18px; font: 700 1.3rem ui-monospace, monospace; pointer-events: none; text-shadow: 0 0 10px #00ffa3; }
+    #msg { position: fixed; inset: 0; display: grid; place-content: center; text-align: center; gap: 6px; background: rgba(2, 4, 14, .55); }
+    #msg h1 { margin: 0; font-size: clamp(2rem, 8vw, 4rem); letter-spacing: .06em; color: #00ffa3; text-shadow: 0 0 24px #00ffa3; }
+    #msg p { margin: 0; color: #a8c7bb; }
+    #msg button { margin-top: 12px; font: 700 1.1rem inherit; padding: 12px 28px; border: 0; border-radius: 999px; background: #00ffa3; color: #00170d; cursor: pointer; }
+    [hidden] { display: none !important; }
+  </style>
+</head>
+<body>
+  <canvas id="c" aria-label="Slope Run game"></canvas>
+  <div id="hud"><span id="score">0</span><span id="best">BEST 0</span></div>
+  <div id="msg" role="dialog" aria-live="polite">
+    <h1 id="mTitle">SLOPE RUN</h1>
+    <p id="mText">← → or A D to steer. Don't fall. Don't hit the red blocks.</p>
+    <p>On touch: hold the left or right half of the screen.</p>
+    <button id="go">Start</button>
+  </div>
+  <script type="module" src="game.js"></script>
+</body>
+</html>

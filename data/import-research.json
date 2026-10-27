@@ -1,0 +1,121 @@
+[
+  {
+    "id": "2048",
+    "repo": "gabrielecirulli/2048",
+    "commit": "478b6ec346e3787f589e4af751378d06ded4cbbc",
+    "stars": 13450,
+    "license": "MIT"
+  },
+  {
+    "id": "hextris",
+    "repo": "Hextris/hextris",
+    "commit": "3f4847dc8fd7dab3d1c87e6324b9159d92fbd396",
+    "stars": 2443,
+    "license": "NOASSERTION"
+  },
+  {
+    "id": "racer",
+    "repo": "jakesgordon/javascript-racer",
+    "commit": "3e8a060b5900755db27f899612a74a77427c853e",
+    "stars": 1175,
+    "license": "MIT"
+  },
+  {
+    "id": "pong",
+    "repo": "jakesgordon/javascript-pong",
+    "commit": "ca3240536e4f79ab7144388e56ed19de715b6662",
+    "stars": 221,
+    "license": "MIT"
+  },
+  {
+    "id": "breakout",
+    "repo": "jakesgordon/javascript-breakout",
+    "commit": "eed59e2affa9423b93d2ac8ff93061bb88b33284",
+    "stars": 78,
+    "license": "NOASSERTION"
+  },
+  {
+    "id": "snake",
+    "repo": "jakesgordon/javascript-snakes",
+    "commit": "4ed98daa36d1c219576dabd3e67bc19236ab2b0b",
+    "stars": 120,
+    "license": "MIT"
+  },
+  {
+    "id": "asteroids",
+    "repo": "dmcinnes/HTML5-Asteroids",
+    "commit": "930301cbda83ed3b120f64b801d937d077ee2da0",
+    "stars": 355,
+    "license": "MIT"
+  },
+  {
+    "id": "dino",
+    "repo": "wayou/t-rex-runner",
+    "commit": "5455bfa408ec6b707c7300ff194b7390733a766d",
+    "stars": 2197,
+    "license": "BSD-3-Clause"
+  },
+  {
+    "id": "clumsy-bird",
+    "repo": "ellisonleao/clumsy-bird",
+    "commit": "fae3d487d5102af29fb3f78431cbd45e9b83aed3",
+    "stars": 1630,
+    "license": "GPL-3.0"
+  },
+  {
+    "id": "match-3",
+    "repo": "rembound/Match-3-Game-HTML5",
+    "commit": "be7df47403668623ed40073fa87d39d9b4c7da2d",
+    "stars": 80,
+    "license": "MIT"
+  },
+  {
+    "id": "bubble-shooter",
+    "repo": "rembound/Bubble-Shooter-HTML5",
+    "commit": "2e62806ef5d7471f77566bc1cf6f2ac17a584c4d",
+    "stars": 58,
+    "license": "MIT"
+  },
+  {
+    "id": "alien-invasion",
+    "repo": "cykod/AlienInvasion",
+    "commit": "d208e3c803c826999aa0592993c3c934dfcc5613",
+    "stars": 183,
+    "license": "GPL-2.0"
+  },
+  {
+    "id": "pacman",
+    "repo": "mumuy/pacman",
+    "commit": "8a96194f7cf0102db2d7f0e69450166beb1d7116",
+    "stars": 1646,
+    "license": "MIT"
+  },
+  {
+    "id": "floppybird",
+    "repo": "nebez/floppybird",
+    "commit": "efd2c7f740299688e524e57bfa3f635c9b857f82",
+    "stars": 599,
+    "license": "Apache-2.0"
+  },
+  {
+    "id": "tetris-classic",
+    "repo": "jakesgordon/javascript-tetris",
+    "commit": "e5c0c42f7dac0f3514a55eff656c6e22e95d68ed",
+    "stars": 737,
+    "license": "MIT"
+  },
+  {
+    "id": "invaderz",
+    "repo": "victorqribeiro/invaderz",
+    "commit": "a3ac9574f7a1904fb74d7fdff22b9b2e7c94a310",
+    "stars": 711,
+    "license": "MIT"
+  },
+  {
+    "id": "space-invaders",
+    "repo": "dwmkerr/spaceinvaders",
+    "commit": "5f79c6ae4f3cb1fbda0be5cc5212a3a407fa27ee",
+    "stars": 213,
+    "license": "MIT"
+  }
+]

@@ -1,0 +1,10 @@
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/
+node_modules/
+test-results/
+playwright-report/
+shot-*.png
+.ignore
+/public/vendor/
+AGENTS.md
+opencode.json

@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Console emulator</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    html, body { height: 100%; margin: 0; }
+    body { background: #0b0e1a; color: #eef1ff; font: 16px/1.5 system-ui, "Segoe UI", sans-serif; }
+    #picker { height: 100%; display: grid; place-items: center; padding: 16px; }
+    .box { width: min(560px, 100%); background: #161c3a; border: 1px solid #2a3363; border-radius: 20px; padding: 24px; display: grid; gap: 14px; }
+    h1 { margin: 0; font-size: 1.5rem; }
+    p { margin: 0; color: #98a2d0; }
+    label.drop { display: grid; place-items: center; gap: 4px; border: 2px dashed #3a4585; border-radius: 16px; padding: 28px 12px; cursor: pointer; text-align: center; }
+    label.drop:hover, label.drop.over, label.drop:focus-within { border-color: #5ee7ff; background: #1d2548; }
+    label.drop b { font-size: 1.1rem; }
+    input[type=file] { position: absolute; opacity: 0; width: 1px; height: 1px; }
+    select, button { font: inherit; padding: 8px 12px; border-radius: 10px; border: 1px solid #2a3363; background: #1d2548; color: #eef1ff; }
+    button.go { background: #ffd23f; color: #151000; font-weight: 700; border: 0; padding: 12px 18px; cursor: pointer; }
+    button.go:disabled { opacity: .45; cursor: not-allowed; }
+    .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .tips { font-size: .88rem; }
+    .tips li { margin: 3px 0; }
+    #err { color: #ff6b8a; min-height: 1.4em; }
+    #game { width: 100%; height: 100%; }
+    [hidden] { display: none !important; }
+    a { color: #5ee7ff; }
+  </style>
+</head>
+<body>
+  <div id="picker">
+    <div class="box">
+      <h1 id="title">Console emulator</h1>
+      <p>Runs SNES, Game Boy Advance and Nintendo 64 games in your browser using EmulatorJS. <b>No games are included</b> — pick a ROM file you legally own. It stays on your device.</p>
+      <label class="drop" id="drop">
+        <b id="fileLabel">Choose a ROM file</b>
+        <span>or drop it here (.sfc .smc .gba .z64 .n64 .v64 .zip .7z)</span>
+        <input type="file" id="rom" accept=".sfc,.smc,.gba,.z64,.n64,.v64,.zip,.7z,.bin">
+      </label>
+      <div class="row">
+        <label for="core">System</label>
+        <select id="core">
+          <option value="snes">Super Nintendo (snes9x)</option>
+          <option value="gba">Game Boy Advance (mGBA)</option>
+          <option value="n64">Nintendo 64 (Mupen64Plus-Next)</option>
+        </select>
+        <button class="go" id="start" disabled>▶ Start</button>
+      </div>
+      <p id="err" role="alert"></p>
+      <ul class="tips">
+        <li><b>Multiplayer:</b> plug in up to four gamepads before starting; map them in the emulator menu (⚙).</li>
+        <li><b>Keyboard:</b> arrows, Z/X/A/S and Enter work by default; rebind via ⚙ → Control Settings.</li>
+        <li>Saves and save states stay in your browser. N64 is demanding and works best in Chrome/Edge on a recent PC.</li>
+        <li>Emulator: <a href="emulator/README.md" target="_blank" rel="noopener">EmulatorJS</a> (GPL-3.0). Cores: snes9x, mGBA, Mupen64Plus-Next — licenses in <code>emulator/CORE-LICENSES</code>.</li>
+      </ul>
+    </div>
+  </div>
+  <div id="game" hidden></div>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const $ = (id) => document.getElementById(id);
+    const detect = { sfc: 'snes', smc: 'snes', gba: 'gba', z64: 'n64', n64: 'n64', v64: 'n64' };
+    if (params.get('title')) $('title').textContent = params.get('title');
+    const preset = ['snes', 'gba', 'n64'].includes(params.get('core')) ? params.get('core') : null;
+    if (preset) $('core').value = preset;
+    let file = null;
+
+    function pick(f) {
+      file = f;
+      $('fileLabel').textContent = f.name;
+      $('err').textContent = '';
+      const ext = f.name.split('.').pop().toLowerCase();
+      if (!preset && detect[ext]) $('core').value = detect[ext];
+      $('start').disabled = false;
+    }
+    $('rom').onchange = (e) => e.target.files[0] && pick(e.target.files[0]);
+    const drop = $('drop');
+    drop.ondragover = (e) => { e.preventDefault(); drop.classList.add('over'); };
+    drop.ondragleave = () => drop.classList.remove('over');
+    drop.ondrop = (e) => { e.preventDefault(); drop.classList.remove('over'); if (e.dataTransfer.files[0]) pick(e.dataTransfer.files[0]); };
+
+    $('start').onclick = () => {
+      if (!file) return;
+      const core = $('core').value;
+      $('picker').hidden = true;
+      $('game').hidden = false;
+      window.EJS_player = '#game';
+      window.EJS_core = core;
+      window.EJS_gameUrl = URL.createObjectURL(file);
+      window.EJS_gameName = file.name.replace(/\.[^.]+$/, '');
+      window.EJS_pathtodata = 'emulator/data/';
+      window.EJS_startOnLoaded = true;
+      window.EJS_threads = false;
+      window.EJS_disableDatabases = false;
+      window.EJS_onGameStart = () => document.title = window.EJS_gameName;
+      const s = document.createElement('script');
+      s.src = 'emulator/data/loader.js';
+      s.onerror = () => { $('picker').hidden = false; $('game').hidden = true; $('err').textContent = 'Could not load the emulator files. Run npm run build / reinstall.'; };
+      document.body.append(s);
+    };
+  </script>
+</body>
+</html>

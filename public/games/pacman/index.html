@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=0">
+  <title>Pac-Man</title>
+  <link rel="shortcut icon" href="favicon.png">
+  <link rel="stylesheet" href="./static/style/index.css">
+  <!-- Retro Games Locally patch: replaced the author's site chrome (header, remote CSS/JS, redirect and analytics scripts)
+       with a minimal offline page. Game code in static/script is unmodified. Source: https://github.com/mumuy/pacman (MIT). -->
+  <style>
+    @font-face { font-family: PressStart2P; src: url(static/font/PressStart2P.ttf); }
+    html, body { margin: 0; height: 100%; background: #000; }
+    body { display: grid; place-items: center; }
+    .mod-panel { margin: 0; width: 100%; }
+    .mod-panel .info p { color: #888; font-family: system-ui, sans-serif; margin: 0; }
+    canvas { max-width: 100%; max-height: calc(100vh - 56px); width: auto; height: auto; aspect-ratio: 3 / 2; }
+  </style>
+</head>
+<body>
+  <div class="mod-panel">
+    <canvas id="canvas" width="960" height="640">Canvas is not supported</canvas>
+    <div class="info"><p>Press [space] to pause or continue · arrow keys to move</p></div>
+  </div>
+  <script src="./static/script/game.js"></script>
+  <script src="./static/script/index.js"></script>
+</body>
+</html>

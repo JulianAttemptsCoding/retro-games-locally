@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Duel Arena 1v1</title>
+  <style>
+    html, body { margin: 0; height: 100%; background: #0b0e1a; color: #eef1ff; font-family: system-ui, "Segoe UI", sans-serif; overflow: hidden; }
+    body { display: grid; place-items: center; }
+    .wrap { width: min(100vw, calc(100vh * 16 / 9)); }
+    canvas { display: block; width: 100%; height: auto; background: #10152e; border-radius: 8px; image-rendering: pixelated; }
+    #legend { display: flex; justify-content: space-between; font-size: clamp(10px, 1.4vw, 14px); color: #98a2d0; padding: 6px 4px; }
+    #legend b { color: #eef1ff; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <canvas id="c" width="960" height="540" aria-label="Duel Arena game board"></canvas>
+    <div id="legend"><span><b style="color:#5ee7ff">P1</b> WASD move · F fire · G wall</span><span>Enter: start / rematch · first to 3 rounds</span><span><b style="color:#ff6b8a">P2</b> Arrows move · L fire · K wall</span></div>
+  </div>
+  <script src="game.js"></script>
+</body>
+</html>
