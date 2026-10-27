@@ -48,7 +48,7 @@ let nextCol = 2;      // lane being moved to (both stay clear during a transitio
 let shiftRows = 0;    // rows left in the current transition
 let lastShift = -9;
 let section = null;   // { ramp, gapEnd, padEnd } for a jump section
-let nextSectionAt = 40;
+let nextSectionAt = 30;
 let rng = Math.random;
 
 const speedAtRow = (i) => Math.min(42, 14 + i * ROW * 0.018);
@@ -61,7 +61,8 @@ function makeRow(i) {
     const d = Math.min(1, i / 220);
     const speedAt = speedAtRow(i);
     if (section && i > section.padEnd) section = null;
-    if (!section && shiftRows === 0 && i >= nextSectionAt && i - lastShift > 6 && rng() < 0.25) {
+    // Once a jump is due, it starts at the first calm stretch (no lane change under way).
+    if (!section && shiftRows === 0 && i >= nextSectionAt && i - lastShift > 6) {
       // Jump: a full-width ramp, then a gap sized to the flight distance at this speed, then a clear landing pad.
       // Airtime = 2 * climb / g, with climb = speed * RAMP_H / ROW, so the distance is 2 * speed^2 * RAMP_H / (ROW * g).
       const flight = (2 * speedAt * speedAt * RAMP_H) / (ROW * GRAVITY);
@@ -83,7 +84,7 @@ function makeRow(i) {
       const transitionRows = Math.ceil(TILE_W / (13 * (ROW / speedAt))) + 1;
       if (shiftRows > 0) {
         if (--shiftRows === 0) safeCol = nextCol;
-      } else if (i - lastShift >= transitionRows + 1 && rng() < 0.5) {
+      } else if (i < nextSectionAt && i - lastShift >= transitionRows + 1 && rng() < 0.5) { // no new lane changes while a jump is due
         const to = Math.max(0, Math.min(COLS - 1, safeCol + (rng() < 0.5 ? -1 : 1)));
         if (to !== safeCol) { nextCol = to; shiftRows = transitionRows; lastShift = i; }
       }
@@ -140,7 +141,7 @@ function reset() {
   shiftRows = 0;
   lastShift = -9;
   section = null;
-  nextSectionAt = 40;
+  nextSectionAt = 30;
   Object.assign(state, { mode: 'play', z: 0, x: 0, y: BALL_R, vy: 0, speed: 14, dist: 0, vx: 0, t: 0 });
   $('msg').hidden = true;
 }

@@ -12,7 +12,7 @@ const advance = (page, seconds, setup) =>
 test.describe('build fight 1v1', () => {
   test('bot match: countdown then fight, players face each other', async ({ page }) => {
     await page.goto('/games/buildfight/index.html?mode=bot&nolock=1');
-    await expect.poll(() => page.evaluate(() => window.__bf?.state.phase)).toBe('countdown');
+    await expect.poll(() => page.evaluate(() => window.__bf?.state.phase)).toMatch(/^(countdown|fight)$/);
     const r = await advance(page, 3.3);
     expect(r.phase).toBe('fight');
     const d = await page.evaluate(() => { const b = window.__bf; return { me: b.me.x, foe: b.foe.x, yaw: b.me.yaw }; });
@@ -65,7 +65,7 @@ test.describe('build fight 1v1', () => {
       // The camera sits over the right shoulder, so the crosshair line runs 0.8 to the player's right (+z when facing +x).
       b.foe.x = b.me.x + 8; b.foe.z = b.me.z + 0.8; b.foe.y = 0;
       b.state.bot.update = () => {};
-      b.aim.pitch = 0.02;
+      b.aim.pitch = -0.06; // the camera sits above the shoulder, so aim slightly down to put the ray through the bot's torso
       b.me.weapon = 'ar';
       b.keys.add('KeyJ');`;
     let r = await advance(page, 0.4, setup); // short burst: a full second would kill the bot and end the round
@@ -115,6 +115,6 @@ test.describe('build fight 1v1', () => {
     await page.getByRole('button', { name: 'Play vs bot' }).click();
     await expect(page.locator('#menu')).toBeHidden();
     await expect(page.locator('#hud')).toBeVisible();
-    await expect.poll(() => page.evaluate(() => window.__bf.state.phase)).toBe('countdown');
+    await expect.poll(() => page.evaluate(() => window.__bf.state.phase)).toMatch(/^(countdown|fight)$/); // the real-time loop may already be past the countdown
   });
 });

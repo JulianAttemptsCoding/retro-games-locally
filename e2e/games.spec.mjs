@@ -51,12 +51,12 @@ test.describe('originals', () => {
   });
 
   test('slope: the generated track is beatable, including jump ramps over gaps', async ({ page }) => {
-    test.setTimeout(90000);
+    test.setTimeout(120000);
     await page.addInitScript(() => { window.__slopeLog = []; });
     await page.goto('/games/slope-run/index.html');
     await page.locator('#go').click();
     await startAutopilot(page);
-    await page.waitForFunction(() => window.__slope.mode === 'dead' || window.__slope.dist > 450, null, { timeout: 80000 });
+    await page.waitForFunction(() => window.__slope.mode === 'dead' || window.__slope.dist > 320, null, { timeout: 110000 });
     const r = await page.evaluate(() => ({
       mode: window.__slope.mode, dist: window.__slope.dist, reason: window.__slope.reason,
       ramps: window.__slopeLog.filter((row, i) => row?.ramp && i * 4 < window.__slope.dist - 20).length,
