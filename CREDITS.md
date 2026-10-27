@@ -24,7 +24,8 @@ established a project is. "Pinned commit" is the exact upstream revision that wa
 | Floppy Bird | [nebez/floppybird](https://github.com/nebez/floppybird) | Apache-2.0 | 599 | [`efd2c7f`](https://github.com/nebez/floppybird/commit/efd2c7f740299688e524e57bfa3f635c9b857f82) |
 | Clumsy Bird | [ellisonleao/clumsy-bird](https://github.com/ellisonleao/clumsy-bird) | GPL-3.0 | 1,630 | [`fae3d48`](https://github.com/ellisonleao/clumsy-bird/commit/fae3d487d5102af29fb3f78431cbd45e9b83aed3) |
 | Pseudo-3D Racer | [jakesgordon/javascript-racer](https://github.com/jakesgordon/javascript-racer) | MIT | 1,175 | [`3e8a060`](https://github.com/jakesgordon/javascript-racer/commit/3e8a060b5900755db27f899612a74a77427c853e) |
-| Slope Run | [Original code in this repo (renders with three.js)](https://github.com/JulianAttemptsCoding/retro-games-locally) | MIT | — | — |
+| Slope (remake) | [Original remake in this repo (three.js)](https://github.com/JulianAttemptsCoding/retro-games-locally) | MIT | — | — |
+| 1v1 Build Fight | [Original remake in this repo (three.js + Trystero)](https://github.com/JulianAttemptsCoding/retro-games-locally) | MIT | — | — |
 | Duel Arena 1v1 | [Original code in this repo](https://github.com/JulianAttemptsCoding/retro-games-locally) | MIT | — | — |
 | Chess | [jhlywa/chess.js](https://github.com/jhlywa/chess.js) | BSD-2-Clause | 4,400 | — |
 | Four in a Row | [Original implementation of the official rules](https://github.com/JulianAttemptsCoding/retro-games-locally) | MIT | — | — |
@@ -39,11 +40,11 @@ established a project is. "Pinned commit" is the exact upstream revision that wa
 | Super Mario Kart | [EmulatorJS/EmulatorJS (snes9x)](https://github.com/EmulatorJS/EmulatorJS) | GPL-3.0 | — | — |
 | Mario Kart: Super Circuit | [EmulatorJS/EmulatorJS (mGBA)](https://github.com/EmulatorJS/EmulatorJS) | GPL-3.0 | — | — |
 | Any SNES / GBA / N64 game | [EmulatorJS/EmulatorJS](https://github.com/EmulatorJS/EmulatorJS) | GPL-3.0 | — | — |
-| Slope (official) | [Closed source (Y8 Games)](https://www.y8.com/games/slope) | Proprietary | — | — |
 
-Games marked "Original code" are written for this repository and are MIT licensed. They are *inspired by* Slope and
-1v1.LOL but share no code or assets with them. 1v1.LOL was permanently shut down by its publisher on 3 Nov 2025
-([announcement](https://1v1lol.statuspage.io/)); Slope is closed source (Y8) and is only linked, never copied.
+Games marked "Original" are written for this repository and are MIT licensed. *Slope (remake)* and *1v1 Build Fight* are
+from-scratch remakes of the public gameplay of Slope (Y8, closed source, <https://www.y8.com/games/slope>) and 1v1.LOL
+(permanently shut down by its publisher on 3 Nov 2025, [announcement](https://1v1lol.statuspage.io/)). They share no code or
+assets with those games and are not affiliated with their publishers or with Epic Games.
 
 ## Console emulation
 

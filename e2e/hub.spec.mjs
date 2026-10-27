@@ -24,13 +24,15 @@ test.describe('library', () => {
     await expect(page.locator('#empty')).toBeVisible();
   });
 
-  test('"slope unblocked" finds playable Slope Run and the official Slope link', async ({ page }) => {
+  test('searching "slope unblocked" or "1v1.lol" finds the playable remakes', async ({ page }) => {
     await page.goto('/');
-    await page.locator('#q').fill('slope unblocked');
     const cards = page.locator('#grid .card');
-    await expect(cards).toHaveCount(2);
-    await expect(cards.filter({ hasText: 'Slope Run' })).toHaveCount(1);
-    await expect(cards.filter({ hasText: 'Slope (official)' })).toHaveCount(1);
+    await page.locator('#q').fill('slope unblocked');
+    await expect(cards).toHaveCount(1);
+    await expect(cards.first()).toContainText('Slope (remake)');
+    await page.locator('#q').fill('1v1.lol');
+    await expect(cards).toHaveCount(1);
+    await expect(cards.first()).toContainText('1v1 Build Fight');
   });
 
   test('keyboard: "/" focuses search and Enter opens the detail dialog', async ({ page }) => {
@@ -57,11 +59,10 @@ test.describe('library', () => {
   });
 
   test('unavailable and ROM titles are honest', async ({ page }) => {
-    await page.goto('/#1v1lol');
+    await page.goto('/#buildfight');
     const dlg = page.locator('#detail');
-    await expect(dlg).toContainText(/permanently shut down/i);
-    await expect(dlg.getByRole('button', { name: /Duel Arena/ })).toBeVisible();
-    await expect(dlg.getByRole('link', { name: /Play now/ })).toHaveCount(0);
+    await expect(dlg).toContainText(/permanently shut down/i); // says plainly that the original 1v1.LOL is gone
+    await expect(dlg.getByRole('link', { name: /Play now/ })).toBeVisible();
 
     await page.goto('/#mariokart-64');
     await expect(page.locator('#detail')).toContainText('No game files are included');

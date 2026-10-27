@@ -20,9 +20,10 @@ established a project is. "Pinned commit" is the exact upstream revision that wa
 | --- | --- | --- | ---: | --- |
 ${rows.join('\n')}
 
-Games marked "Original code" are written for this repository and are MIT licensed. They are *inspired by* Slope and
-1v1.LOL but share no code or assets with them. 1v1.LOL was permanently shut down by its publisher on 3 Nov 2025
-([announcement](https://1v1lol.statuspage.io/)); Slope is closed source (Y8) and is only linked, never copied.
+Games marked "Original" are written for this repository and are MIT licensed. *Slope (remake)* and *1v1 Build Fight* are
+from-scratch remakes of the public gameplay of Slope (Y8, closed source, <https://www.y8.com/games/slope>) and 1v1.LOL
+(permanently shut down by its publisher on 3 Nov 2025, [announcement](https://1v1lol.statuspage.io/)). They share no code or
+assets with those games and are not affiliated with their publishers or with Epic Games.
 
 ## Console emulation
 

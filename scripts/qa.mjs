@@ -24,7 +24,8 @@ for (const game of list) {
   const problems = [];
   // Audio autoplay rejections before a user gesture are expected and harmless.
   page.on('pageerror', (e) => { if (!/play\(\) failed because the user didn't interact/.test(e.message)) problems.push(`pageerror: ${e.message}`); });
-  page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) problems.push(`console: ${m.text()}`); });
+  // Some of Trystero's public signaling relays are down at any given time; that is expected noise, not a game bug.
+  page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource|WebSocket connection to 'wss:/.test(m.text())) problems.push(`console: ${m.text()}`); });
   page.on('response', (r) => { if (r.status() >= 400) problems.push(`HTTP ${r.status()} ${r.url().replace(base, '')}`); });
   const t0 = Date.now();
   try {

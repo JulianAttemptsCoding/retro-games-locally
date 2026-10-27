@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { startAutopilot } from './slope-autopilot.mjs';
 
 const cell = (page, n) => page.locator(`[data-cell="${n}"]`);
 
@@ -47,6 +48,23 @@ test.describe('originals', () => {
     await page.keyboard.up('ArrowLeft');
     await page.keyboard.press('KeyR');
     await expect.poll(() => page.evaluate(() => window.__slope.mode)).toBe('play');
+  });
+
+  test('slope: the generated track is beatable, including jump ramps over gaps', async ({ page }) => {
+    test.setTimeout(90000);
+    await page.addInitScript(() => { window.__slopeLog = []; });
+    await page.goto('/games/slope-run/index.html');
+    await page.locator('#go').click();
+    await startAutopilot(page);
+    await page.waitForFunction(() => window.__slope.mode === 'dead' || window.__slope.dist > 450, null, { timeout: 80000 });
+    const r = await page.evaluate(() => ({
+      mode: window.__slope.mode, dist: window.__slope.dist, reason: window.__slope.reason,
+      ramps: window.__slopeLog.filter((row, i) => row?.ramp && i * 4 < window.__slope.dist - 20).length,
+      gaps: window.__slopeLog.filter((row, i) => row && !row.cells.some(Boolean) && i * 4 < window.__slope.dist - 20).length,
+    }));
+    expect(r.mode, `died: ${r.reason} at ${r.dist}`).toBe('play');
+    expect(r.ramps).toBeGreaterThan(0); // crossed at least one ramp-and-gap jump
+    expect(r.gaps).toBeGreaterThan(0);
   });
 
   test('duel arena: a hit costs health', async ({ page }) => {

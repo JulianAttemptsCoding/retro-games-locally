@@ -16,15 +16,18 @@ Requires Node.js 22+. Open the LAN address printed on start from a phone or anot
 
 | Players | Games |
 | --- | --- |
-| Solo | 2048, Hextris, Tetris (Classic), Match-3, Bubble Shooter, Pac-Man, Breakout, Snake, Asteroids, Space Invaders, Invaderz, Alien Invasion, T-Rex Runner, Floppy Bird, Clumsy Bird, Pseudo-3D Racer, Slope Run |
+| Solo | 2048, Hextris, Tetris (Classic), Match-3, Bubble Shooter, Pac-Man, Breakout, Snake, Asteroids, Space Invaders, Invaderz, Alien Invasion, T-Rex Runner, Floppy Bird, Clumsy Bird, Pseudo-3D Racer, Slope (remake), 1v1 Build Fight (vs bot) |
 | Local 2P+ | Pong (shared keyboard), Duel Arena 1v1 (shared keyboard), all tabletop games (pass-and-play), console games with gamepads |
-| Online friends | Tetris — Friends (shared rooms), Chess, Four in a Row, Checkers, Reversi, Tic-Tac-Toe, Gomoku, Mancala, Nim, Dots & Boxes |
+| Online friends | 1v1 Build Fight, Tetris — Friends (shared rooms), Chess, Four in a Row, Checkers, Reversi, Tic-Tac-Toe, Gomoku, Mancala, Nim, Dots & Boxes |
 | Bring your own ROM | Mario Kart 64 / Super Mario Kart / Mario Kart: Super Circuit, or any SNES/GBA/N64 game, in the bundled EmulatorJS |
 
-- **1v1.LOL** was permanently shut down by its publisher on 3 Nov 2025, so it is listed as unavailable. *Duel Arena 1v1*
-  is an original local replacement inspired by it.
-- **Slope** is closed source, so the library links to the official site and ships *Slope Run*, an original game in the
-  same spirit.
+- **1v1.LOL** was permanently shut down by its publisher on 3 Nov 2025. *1v1 Build Fight* is a from-scratch remake of its
+  public gameplay (third-person, build walls/floors/ramps/cones, pickaxe/shotgun/rifle, three lives each) that you can play
+  against a bot or a friend online. Edit mode and materials are not included. *Duel Arena 1v1* is a separate, simpler
+  top-down local game.
+- **Slope** (Y8) is closed source, so *Slope (remake)* is written from scratch from its public gameplay description: a ball
+  on a steep downhill track, speed that keeps rising, red blocks, gaps and jump ramps. Official game:
+  <https://www.y8.com/games/slope>. Both remakes share no code or assets with the originals.
 - **No ROMs are included.** Bring a file you legally own; it never leaves your browser.
 
 Sources, licenses, stars and pinned commits for every bundled game are in [CREDITS.md](CREDITS.md). Add a game by

@@ -1,5 +1,9 @@
 import * as THREE from '../../vendor/three.module.min.js';
 
+// Slope remake: an original implementation of the endless "ball down a steep slope" idea.
+// Gameplay facts come from public descriptions of Slope (steer a ball, speed rises, red blocks, gaps, ramps).
+// No code or assets from the original are used.
+
 const ROW = 4;            // depth of one track row
 const COLS = 5;           // tiles across
 const TILE_W = 2.2;
@@ -7,6 +11,8 @@ const HALF = (COLS * TILE_W) / 2;
 const VISIBLE_ROWS = 46;
 const BALL_R = 0.5;
 const GRAVITY = 32;
+const SLOPE = 0.42;       // radians the whole track is tilted downhill
+const RAMP_H = 1.4;       // rise of a jump ramp over one row
 
 const $ = (id) => document.getElementById(id);
 const canvas = $('c');
@@ -21,65 +27,105 @@ const sun = new THREE.DirectionalLight(0xffffff, 1.6);
 sun.position.set(-4, 10, 6);
 scene.add(sun);
 
+// Everything that lies on the track lives in `world`, which is tilted so the track runs downhill.
+const world = new THREE.Group();
+world.rotation.x = -SLOPE;
+scene.add(world);
+
 const tileGeo = new THREE.BoxGeometry(TILE_W - 0.12, 0.5, ROW - 0.12);
 const blockGeo = new THREE.BoxGeometry(TILE_W - 0.3, 1.4, 1.4);
-const tileMats = [0x0f8f6b, 0x15c08f].map((c) => new THREE.MeshStandardMaterial({ color: c, roughness: 0.5, metalness: 0.2, emissive: c, emissiveIntensity: 0.15 }));
+const rampLen = Math.hypot(ROW, RAMP_H);
+const rampGeo = new THREE.BoxGeometry(TILE_W - 0.12, 0.4, rampLen);
+const tileMats = [0.0, 0.05].map((l) => new THREE.MeshStandardMaterial({ color: 0x0f8f6b, roughness: 0.5, metalness: 0.2, emissive: 0x0f8f6b, emissiveIntensity: 0.15 + l }));
 const blockMat = new THREE.MeshStandardMaterial({ color: 0xff3b5c, emissive: 0xff1744, emissiveIntensity: 0.55, roughness: 0.4 });
+const rampMat = new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0xbfffee, emissiveIntensity: 0.4, roughness: 0.4 });
 const ball = new THREE.Mesh(new THREE.SphereGeometry(BALL_R, 24, 16), new THREE.MeshStandardMaterial({ color: 0xffffff, emissive: 0x7affd7, emissiveIntensity: 0.35, roughness: 0.25 }));
-scene.add(ball);
+world.add(ball);
 
-const rows = new Map(); // row index -> { cells: boolean[], blocks: boolean[], group }
+const rows = new Map(); // row index -> { cells, blocks, ramp, group }
 let safeCol = 2;      // lane that is always clear
 let nextCol = 2;      // lane being moved to (both stay clear during a transition)
 let shiftRows = 0;    // rows left in the current transition
 let lastShift = -9;
+let section = null;   // { ramp, gapEnd, padEnd } for a jump section
+let nextSectionAt = 40;
 let rng = Math.random;
+
+const speedAtRow = (i) => Math.min(42, 14 + i * ROW * 0.018);
 
 function makeRow(i) {
   const cells = Array(COLS).fill(true);
   const blocks = Array(COLS).fill(false);
+  let ramp = false;
   if (i > 6) {
     const d = Math.min(1, i / 220);
-    // Moving one column takes about TILE_W / 13 seconds, so keep both lanes clear for as many rows as that needs
-    // at the speed the ball will have here. That keeps every generated track beatable at top speed.
-    const speedAt = Math.min(42, 14 + i * ROW * 0.018);
-    const transitionRows = Math.ceil(TILE_W / (13 * (ROW / speedAt))) + 1;
-    if (shiftRows > 0) {
-      if (--shiftRows === 0) safeCol = nextCol;
-    } else if (i - lastShift >= transitionRows + 1 && rng() < 0.5) {
-      const to = Math.max(0, Math.min(COLS - 1, safeCol + (rng() < 0.5 ? -1 : 1)));
-      if (to !== safeCol) { nextCol = to; shiftRows = transitionRows; lastShift = i; }
+    const speedAt = speedAtRow(i);
+    if (section && i > section.padEnd) section = null;
+    if (!section && shiftRows === 0 && i >= nextSectionAt && i - lastShift > 6 && rng() < 0.25) {
+      // Jump: a full-width ramp, then a gap sized to the flight distance at this speed, then a clear landing pad.
+      // Airtime = 2 * climb / g, with climb = speed * RAMP_H / ROW, so the distance is 2 * speed^2 * RAMP_H / (ROW * g).
+      const flight = (2 * speedAt * speedAt * RAMP_H) / (ROW * GRAVITY);
+      const gap = Math.max(1, Math.min(7, Math.floor((flight * 0.55) / ROW)));
+      const pad = Math.ceil(flight / ROW) + 3;
+      section = { ramp: i, gapEnd: i + gap, padEnd: i + gap + pad };
+      lastShift = section.padEnd;
+      nextSectionAt = section.padEnd + 14 + Math.floor(rng() * 20);
     }
-    for (let c = 0; c < COLS; c++) {
-      if (c === safeCol || (shiftRows > 0 && c === nextCol)) continue;
-      const r = rng();
-      if (r < 0.1 + d * 0.28) cells[c] = false;
-      else if (r < 0.2 + d * 0.4) blocks[c] = true;
+    if (section && i === section.ramp) {
+      ramp = true;
+    } else if (section && i > section.ramp && i <= section.gapEnd) {
+      cells.fill(false);
+    } else if (section && i > section.gapEnd) {
+      // landing pad: plain tiles
+    } else {
+      // Moving one column takes about TILE_W / 13 seconds, so keep both lanes clear for as many rows as that needs
+      // at the speed the ball will have here. That keeps every generated track beatable at top speed.
+      const transitionRows = Math.ceil(TILE_W / (13 * (ROW / speedAt))) + 1;
+      if (shiftRows > 0) {
+        if (--shiftRows === 0) safeCol = nextCol;
+      } else if (i - lastShift >= transitionRows + 1 && rng() < 0.5) {
+        const to = Math.max(0, Math.min(COLS - 1, safeCol + (rng() < 0.5 ? -1 : 1)));
+        if (to !== safeCol) { nextCol = to; shiftRows = transitionRows; lastShift = i; }
+      }
+      for (let c = 0; c < COLS; c++) {
+        if (c === safeCol || (shiftRows > 0 && c === nextCol)) continue;
+        const r = rng();
+        if (r < 0.1 + d * 0.28) cells[c] = false;
+        else if (r < 0.2 + d * 0.4) blocks[c] = true;
+      }
+      // Occasionally add a full-width obstacle row with a single gap so the safe lane stays reachable.
+      if (rng() < 0.03 + d * 0.08) for (let c = 0; c < COLS; c++) if (c !== safeCol && !(shiftRows > 0 && c === nextCol)) blocks[c] = true;
     }
-    // Occasionally add a full-width obstacle row with a single gap so the safe lane stays reachable.
-    if (rng() < 0.03 + d * 0.08) for (let c = 0; c < COLS; c++) if (c !== safeCol && !(shiftRows > 0 && c === nextCol)) blocks[c] = true;
   }
   const group = new THREE.Group();
   group.position.z = -i * ROW;
   for (let c = 0; c < COLS; c++) {
     const x = -HALF + TILE_W * (c + 0.5);
-    if (cells[c]) {
-      const t = new THREE.Mesh(tileGeo, tileMats[(i + c) % 2]);
-      t.position.set(x, -0.25, 0);
+    if (!cells[c]) continue;
+    if (ramp) {
+      const t = new THREE.Mesh(rampGeo, rampMat);
+      t.rotation.x = Math.atan2(RAMP_H, ROW);
+      t.position.set(x, RAMP_H / 2 - 0.2, 0);
       group.add(t);
-      if (blocks[c]) {
-        const b = new THREE.Mesh(blockGeo, blockMat);
-        b.position.set(x, 0.7, 0);
-        group.add(b);
-      }
+      continue;
+    }
+    const t = new THREE.Mesh(tileGeo, tileMats[(i + c) % 2]);
+    t.position.set(x, -0.25, 0);
+    group.add(t);
+    if (blocks[c]) {
+      const b = new THREE.Mesh(blockGeo, blockMat);
+      b.position.set(x, 0.7, 0);
+      group.add(b);
     }
   }
-  scene.add(group);
-  rows.set(i, { cells, blocks, group });
+  world.add(group);
+  rows.set(i, { cells, blocks, ramp, group });
+  // QA hook: lets tests check the whole track. `lane` is the column the generator guarantees is clear on this row.
+  if (window.__slopeLog) window.__slopeLog[i] = { cells: [...cells], blocks: [...blocks], ramp, lane: shiftRows > 0 ? nextCol : safeCol };
 }
 
 function clearRows() {
-  for (const r of rows.values()) scene.remove(r.group);
+  for (const r of rows.values()) world.remove(r.group);
   rows.clear();
 }
 
@@ -93,6 +139,8 @@ function reset() {
   safeCol = nextCol = 2;
   shiftRows = 0;
   lastShift = -9;
+  section = null;
+  nextSectionAt = 40;
   Object.assign(state, { mode: 'play', z: 0, x: 0, y: BALL_R, vy: 0, speed: 14, dist: 0, vx: 0, t: 0 });
   $('msg').hidden = true;
 }
@@ -116,12 +164,10 @@ function die(reason) {
 function step(dt) {
   if (state.mode === 'ready') {
     state.t += dt;
-    camera.position.set(Math.sin(state.t * 0.4) * 3, 4, 8);
-    camera.lookAt(0, 0, -20);
     return;
   }
   if (state.mode === 'play') {
-    state.speed = Math.min(42, 14 + state.dist * 0.018);
+    state.speed = speedAtRow(state.dist / ROW);
     state.z -= state.speed * dt;
     state.dist = -state.z;
     const dir = (state.right ? 1 : 0) - (state.left ? 1 : 0);
@@ -133,12 +179,16 @@ function step(dt) {
     const col = Math.floor((state.x + HALF) / TILE_W);
     const row = rows.get(rowIdx);
     const hasTile = !!row && col >= 0 && col < COLS && row.cells[col];
+    const u = -state.z - rowIdx * ROW;                       // position along the row, -ROW/2 .. ROW/2
+    const ground = hasTile && row.ramp ? ((u + ROW / 2) / ROW) * RAMP_H : 0;
     state.vy -= GRAVITY * dt;
     state.y += state.vy * dt;
-    if (hasTile && state.y <= BALL_R && state.y > -0.35 && state.vy <= 0) { state.y = BALL_R; state.vy = 0; }
+    if (hasTile && state.y <= ground + BALL_R && state.y > ground - 0.35 && state.vy <= (row.ramp ? state.speed * RAMP_H / ROW : 0)) {
+      state.y = ground + BALL_R;
+      state.vy = row.ramp ? (state.speed * RAMP_H) / ROW : 0; // leaving a ramp carries the climb speed into the air
+    }
     if (hasTile && row.blocks[col] && state.y < 1.4 + BALL_R * 0.8) {
-      const localZ = Math.abs(-state.z - rowIdx * ROW); // distance from row centre
-      if (localZ < 0.7 + BALL_R) return die('crash');
+      if (Math.abs(u) < 0.7 + BALL_R) return die('crash');
     }
     if (state.y < -8) return die('fall');
   }
@@ -150,24 +200,32 @@ function step(dt) {
   }
   const head = Math.floor(-state.z / ROW);
   for (let i = Math.max(0, head - 6); i < head + VISIBLE_ROWS; i++) if (!rows.has(i)) makeRow(i);
-  for (const [i, r] of rows) if (i < head - 8) { scene.remove(r.group); rows.delete(i); }
+  for (const [i, r] of rows) if (i < head - 8) { world.remove(r.group); rows.delete(i); }
 }
 
+const _bw = new THREE.Vector3();
 function frame(now) {
   const dt = Math.min(0.05, (now - (frame.last ?? now)) / 1000);
   frame.last = now;
   step(dt);
+  // The track slowly changes colour as you go further, like the levels of the original.
+  const hue = ((160 + state.dist / 40) % 360) / 360;
+  for (const m of tileMats) { m.color.setHSL(hue, 0.8, 0.32); m.emissive.setHSL(hue, 0.8, 0.32); }
   if (state.mode !== 'ready') {
     ball.position.set(state.x, state.y, state.z);
     ball.rotation.x -= state.speed * dt * 2;
-    camera.position.set(state.x * 0.6, 3.4, state.z + 6.5);
-    camera.lookAt(state.x * 0.4, 0.6, state.z - 12);
+    world.updateMatrixWorld();
+    ball.getWorldPosition(_bw);
+    camera.position.set(state.x * 0.6, _bw.y + 3.6, _bw.z + 7);
+    camera.lookAt(state.x * 0.4, _bw.y - 4, _bw.z - 12);
     $('score').textContent = Math.floor(state.dist);
   } else {
     ball.position.set(0, BALL_R, 0);
-    const head = Math.floor(-state.z / ROW);
     for (let i = 0; i < VISIBLE_ROWS; i++) if (!rows.has(i)) makeRow(i);
-    void head;
+    world.updateMatrixWorld();
+    ball.getWorldPosition(_bw);
+    camera.position.set(Math.sin(state.t * 0.4) * 3, _bw.y + 3.8, _bw.z + 8);
+    camera.lookAt(0, _bw.y - 4, _bw.z - 12);
   }
   renderer.render(scene, camera);
   requestAnimationFrame(frame);
