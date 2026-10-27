@@ -27,7 +27,7 @@ function matches(game) {
   if (state.cat && game.category !== state.cat) return false;
   if (state.favOnly && !favs.has(game.id)) return false;
   if (state.q) {
-    const hay = [game.title, game.tagline, game.category, game.modes.join(' '), game.source.label].join(' ').toLowerCase();
+    const hay = [game.title, game.tagline, game.category, game.modes.join(' '), game.source.label, game.aka ?? ''].join(' ').toLowerCase();
     return state.q.toLowerCase().split(/\s+/).every((t) => hay.includes(t));
   }
   return true;

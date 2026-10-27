@@ -24,6 +24,15 @@ test.describe('library', () => {
     await expect(page.locator('#empty')).toBeVisible();
   });
 
+  test('"slope unblocked" finds playable Slope Run and the official Slope link', async ({ page }) => {
+    await page.goto('/');
+    await page.locator('#q').fill('slope unblocked');
+    const cards = page.locator('#grid .card');
+    await expect(cards).toHaveCount(2);
+    await expect(cards.filter({ hasText: 'Slope Run' })).toHaveCount(1);
+    await expect(cards.filter({ hasText: 'Slope (official)' })).toHaveCount(1);
+  });
+
   test('keyboard: "/" focuses search and Enter opens the detail dialog', async ({ page }) => {
     await page.goto('/');
     await page.keyboard.press('/');
