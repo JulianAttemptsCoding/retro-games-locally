@@ -12,6 +12,32 @@ npm run test:e2e # browser tests (Playwright)
 
 Requires Node.js 22+. Open the LAN address printed on start from a phone or another computer on the same network.
 
+## For reviewers: what's mine and how to check it
+
+Most games here are **other people's open-source projects**, credited and pinned to an exact upstream
+commit in [CREDITS.md](CREDITS.md). My work is the platform around them, plus the games marked
+"Original":
+
+| Mine | Where | Notes |
+|---|---|---|
+| Library hub: search, filters, player wrapper, invite links | `public/index.html`, `hub.js`, `catalog.js`, `play.html` | `catalog.js` is the single source of truth for every game |
+| **1v1 Build Fight** | `public/games/buildfight/game.js` (~850 lines) | three.js third-person shooter with build mechanics (walls/floors/ramps), a bot opponent, and P2P online play over Trystero/WebRTC |
+| **Slope (remake)** | `public/games/slope-run/game.js` | three.js endless downhill runner |
+| **Tabletop rules engine** | `public/games/tabletop/rules.mjs` | Four in a Row, Checkers (mandatory captures), Reversi, Tic-Tac-Toe, Gomoku, Mancala, Nim, Dots & Boxes. Chess uses chess.js. |
+| Duel Arena 1v1 | `public/games/duel-arena/` | top-down local 2-player game |
+| Offline packaging | `scripts/`, `CREDITS.md` | vendored builds, licence files copied per game, SHA-256-pinned EmulatorJS cores, credits generator |
+
+Slope and Build Fight are from-scratch remakes based on the public gameplay of closed or discontinued
+games. They share no code or assets with the originals.
+
+```bash
+npm ci
+npm test          # 14 rules tests: wins, draws, illegal moves, mandatory captures, Mancala capture/extra turn, chess mate
+npm run test:e2e  # Playwright: hub search/filter, every game boots, Build Fight (walls block, ramps climb,
+                  # shooting damages the bot, a full match ends with a winner), an autopilot proves Slope's
+                  # generated track is beatable
+```
+
 ## What is in it
 
 | Players | Games |
